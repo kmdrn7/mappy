@@ -95,8 +95,24 @@ class BangunanController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->gambar = UploadedFile::getInstance($model, 'gambar');
+            if ($model->gambar){
+                if ($old->gambar){
+                    if ( file_exists('/var/www/html/mappy/backend/web/images/bangunan/'.$old->gambar) ){
+                        unlink('/var/www/html/mappy/backend/web/images/bangunan/'.$old->gambar);
+                    }
+                }
+
+                $filename = $this->slugify($model->bangunan).'-'.time().'.'.$model->gambar->extension;
+                $model->gambar->saveAs('images/bangunan/'.$filename);
+                $model->gambar = $filename;
+            }
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id_bangunan]);
         }
 
@@ -114,7 +130,11 @@ class BangunanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ( file_exists('/var/www/html/mappy/backend/web/images/bangunan/'.$model->gambar) ){
+            unlink('/var/www/html/mappy/backend/web/images/bangunan/'.$model->gambar);
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }

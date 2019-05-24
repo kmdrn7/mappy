@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ruangan',
             'deskripsi:ntext',
             'lat',
-            //'long',
+            'long',
             //'created_at',
             //'updated_at',
 

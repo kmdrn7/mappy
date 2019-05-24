@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'deskripsi:ntext',
             'gambar',
             'lat',
-            //'long',
+            'long',
             //'created_at',
             //'updated_at',
 

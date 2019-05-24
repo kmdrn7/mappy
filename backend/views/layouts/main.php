@@ -32,6 +32,8 @@ if (Yii::$app->controller->action->id === 'login') {
     <head>
         <meta charset="<?= Yii::$app->charset ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+        <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>

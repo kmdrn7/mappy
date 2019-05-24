@@ -95,8 +95,24 @@ class GambarRuanganController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->gambar = UploadedFile::getInstance($model, 'gambar');
+            if ($model->gambar){
+                if ($old->gambar){
+                    if ( file_exists('/var/www/html/mappy/backend/web/images/gambar-ruangan/'.$old->gambar) ){
+                        unlink('/var/www/html/mappy/backend/web/images/gambar-ruangan/'.$old->gambar);
+                    }
+                }
+
+                $filename = time().'.'.$model->gambar->extension;
+                $model->gambar->saveAs('images/gambar-ruangan/'.$filename);
+                $model->gambar = $filename;
+            }
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id_gambar_ruangan]);
         }
 
@@ -114,7 +130,11 @@ class GambarRuanganController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ( file_exists('/var/www/html/mappy/backend/web/images/gambar-ruangan/'.$model->gambar) ){
+            unlink('/var/www/html/mappy/backend/web/images/gambar-ruangan/'.$model->gambar);
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }
